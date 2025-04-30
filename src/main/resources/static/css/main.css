@@ -134,3 +134,10 @@ footer {
 .social-icon:hover {
     color: var(--primary-color);
 }
+
+.card {
+    transition: transform 0.2s;
+}
+.card:hover {
+    transform: translateY(-5px);
+}

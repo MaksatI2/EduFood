@@ -48,6 +48,13 @@
                             </div>
                         </#if>
 
+                        <#if success??>
+                            <div class="alert alert-success d-flex align-items-center" role="alert">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                <div>${success}</div>
+                            </div>
+                        </#if>
+
                         <form method="post" action="/login">
                             <#if _csrf??>
                                 <input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"

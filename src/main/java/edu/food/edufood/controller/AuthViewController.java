@@ -1,5 +1,6 @@
 package edu.food.edufood.controller;
 
+import edu.food.edufood.dto.UserDTO;
 import edu.food.edufood.model.User;
 import edu.food.edufood.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/auth")
@@ -23,7 +25,7 @@ public class AuthViewController {
     }
 
     @PostMapping("/register")
-    public String registerUser(User user, Model model) {
+    public String registerUser(UserDTO user, Model model) {
         try {
             userService.registerUser(user);
             return "redirect:/auth/login?success";
@@ -34,7 +36,10 @@ public class AuthViewController {
     }
 
     @GetMapping("/login")
-    public String showLoginForm() {
+    public String showLoginForm(@RequestParam(value = "success", required = false) String success, Model model) {
+        if (success != null) {
+            model.addAttribute("success", "Регистрация прошла успешно! Теперь вы можете войти.");
+        }
         return "auth/login";
     }
 

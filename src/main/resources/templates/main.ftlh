@@ -18,39 +18,6 @@
     </section>
 
     <section class="container mb-5">
-        <h2 class="text-center mb-5">Популярные категории</h2>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="category-card">
-                    <img src="/static/images/categories/pizza.jpg" class="card-img-top" alt="Пицца">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Пицца</h5>
-                        <a href="#" class="btn btn-outline-primary">Смотреть меню</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="category-card">
-                    <img src="/static/images/categories/sushi.jpg" class="card-img-top" alt="Суши">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Суши</h5>
-                        <a href="#" class="btn btn-outline-primary">Смотреть меню</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="category-card">
-                    <img src="/static/images/categories/burger.jpg" class="card-img-top" alt="Бургеры">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Бургеры</h5>
-                        <a href="#" class="btn btn-outline-primary">Смотреть меню</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="container mb-5">
         <div class="d-flex justify-content-between align-items-center mb-5">
             <h2>Популярные блюда</h2>
             <a href="#" class="btn btn-outline-primary">Смотреть все</a>

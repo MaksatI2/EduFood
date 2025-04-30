@@ -38,7 +38,9 @@ public class SecurityConfig {
                                 "/static/**",
                                 "/favicon.ico",
                                 "/error",
-                                "/restaurants"
+                                "/restaurants",
+                                "/dishes/restaurants/**",
+                                "/dishes"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

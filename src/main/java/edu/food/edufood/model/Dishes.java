@@ -11,7 +11,7 @@ import java.util.Set;
 @Table(name = "dishes")
 @Getter
 @Setter
-public class Dish {
+public class Dishes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,6 +25,15 @@ public class Dish {
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
+
+    @Column(name = "photo_url")
+    private String photoUrl;
+
+    @Lob
+    @Column(columnDefinition = "text")
+    private String description;
+
+    private Integer weight;
 
     @OneToMany(mappedBy = "dish")
     private Set<OrderDish> orderDishes;

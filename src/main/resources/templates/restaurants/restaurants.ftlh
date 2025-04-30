@@ -88,7 +88,7 @@
                                 </#if>
                             </p>
                             <div class="mt-auto d-flex justify-content-between align-items-center">
-                                <a href="/restaurants/${restaurant.id}" class="btn btn-outline-primary">Подробнее</a>
+                                <a href="dishes/restaurants/${restaurant.id}" class="btn btn-outline-primary">Подробнее</a>
                             </div>
                         </div>
                     </div>

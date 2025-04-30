@@ -33,6 +33,9 @@
                     <a href="/restaurants" class="nav-link <#if activeNav == "restaurants">active</#if>">Рестораны</a>
                 </li>
                 <li class="nav-item">
+                    <a href="/dishes" class="nav-link <#if activeNav == "dishes">active</#if>">Блюда</a>
+                </li>
+                <li class="nav-item">
                     <a href="#" class="nav-link <#if activeNav == "basket">active</#if>">Корзина<i class="fas fa-shopping-cart ms-1"></i></a>
                 </li>
             </ul>
