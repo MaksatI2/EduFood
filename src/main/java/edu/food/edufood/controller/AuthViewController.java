@@ -1,5 +1,6 @@
 package edu.food.edufood.controller;
 
+import edu.food.edufood.dto.UserDTO;
 import edu.food.edufood.model.User;
 import edu.food.edufood.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class AuthViewController {
     }
 
     @PostMapping("/register")
-    public String registerUser(User user, Model model) {
+    public String registerUser(UserDTO user, Model model) {
         try {
             userService.registerUser(user);
             return "redirect:/auth/login?success";

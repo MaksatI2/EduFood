@@ -73,7 +73,7 @@ VALUES (4, 'Ролл Филадельфия', 890.00, 'https://sushiwok.ru/img/d
        (4, 'Сет "Самурай"', 2200.00, 'https://ym1.by/wp-content/uploads/2022/02/19.-32-samuraya.jpg',
         'Ассорти из 24 кусочков: роллы с лососем, тунцом и угрем', 600),
        (4, 'Суши с тунцом', 450.00, 'https://kaif.md/wp-content/uploads/2022/06/sushi-tunec.jpg', '2 шт. суши с филе свежего тунца', 80),
-       (4, 'Сашими из лосося', 920.00, 'https://example.com/dishes/sashimi.jpg', '8 тонких ломтиков свежего лосося',
+       (4, 'Сашими из лосося', 920.00, 'https://i.ytimg.com/vi/b4tpHMc6nNI/maxresdefault.jpg', '8 тонких ломтиков свежего лосося',
         160),
        (4, 'Супу с мисо', 320.00, 'https://akitamarket.ru/wp-content/uploads/2019/11/miso.jpg',
         'Традиционный японский суп с тофу и водорослями', 250),

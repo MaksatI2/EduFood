@@ -1,5 +1,6 @@
 package edu.food.edufood.repository;
 
+import edu.food.edufood.dto.DishesDTO;
 import edu.food.edufood.model.Dishes;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

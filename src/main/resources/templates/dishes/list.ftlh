@@ -28,7 +28,7 @@
                                 </p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="badge bg-primary">
-                                        <i class="fas fa-store me-1"></i> ${dish.restaurant.name}
+                                        <i class="fas fa-store me-1"></i> ${dish.restaurantName}
                                     </span>
                                     <span class="fw-bold">${dish.price} С</span>
                                 </div>

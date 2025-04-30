@@ -1,5 +1,6 @@
 package edu.food.edufood.service.impl;
 
+import edu.food.edufood.dto.UserDTO;
 import edu.food.edufood.model.AccountType;
 import edu.food.edufood.model.User;
 import edu.food.edufood.repository.UserRepository;
@@ -17,19 +18,32 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Override
-    public void registerUser(User user) {
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+    public void registerUser(UserDTO dto) {
+        if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
             throw new RuntimeException("Email уже используется");
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User user = new User();
+        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setAccountType(AccountType.USER);
+        user.setEnabled(true);
+
         userRepository.save(user);
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public Optional<UserDTO> findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(user -> {
+                    UserDTO dto = new UserDTO();
+                    dto.setId(user.getId());
+                    dto.setUsername(user.getUsername());
+                    dto.setEmail(user.getEmail());
+                    dto.setEnabled(user.getEnabled());
+                    dto.setAccountType(user.getAccountType());
+                    return dto;
+                });
     }
 }

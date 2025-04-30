@@ -1,12 +1,11 @@
 package edu.food.edufood.controller;
 
-import edu.food.edufood.model.Restaurant;
+import edu.food.edufood.dto.RestaurantDTO;
 import edu.food.edufood.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +26,7 @@ public class RestaurantsController {
             Model model) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<Restaurant> restaurantPage = restaurantService.findAll(pageable);
+        Page<RestaurantDTO> restaurantPage = restaurantService.findAll(pageable);
 
         model.addAttribute("restaurants", restaurantPage.getContent());
         model.addAttribute("currentPage", page);

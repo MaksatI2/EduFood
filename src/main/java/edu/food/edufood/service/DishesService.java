@@ -1,9 +1,9 @@
 package edu.food.edufood.service;
 
-import edu.food.edufood.model.Dishes;
+import edu.food.edufood.dto.DishesDTO;
 import java.util.List;
 
 public interface DishesService {
-    List<Dishes> getAllDishes();
-    List<Dishes> getDishesByRestaurantId(Long restaurantId);
+    List<DishesDTO> getAllDishes();
+    List<DishesDTO> getDishesByRestaurantId(Long restaurantId);
 }

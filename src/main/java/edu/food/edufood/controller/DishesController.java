@@ -1,5 +1,6 @@
 package edu.food.edufood.controller;
 
+import edu.food.edufood.dto.DishesDTO;
 import edu.food.edufood.model.Dishes;
 import edu.food.edufood.service.DishesService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class DishesController {
 
     @GetMapping
     public String getAllDishes(Model model) {
-        List<Dishes> dishes = dishService.getAllDishes();
+    List<DishesDTO> dishes = dishService.getAllDishes();
         model.addAttribute("dishes", dishes);
         return "dishes/list";
     }
@@ -29,7 +30,7 @@ public class DishesController {
             @PathVariable Long restaurantId,
             Model model
     ) {
-        List<Dishes> dishes = dishService.getDishesByRestaurantId(restaurantId);
+        List<DishesDTO> dishes = dishService.getDishesByRestaurantId(restaurantId);
         model.addAttribute("dishes", dishes);
         return "dishes/list";
     }

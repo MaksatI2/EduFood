@@ -1,6 +1,6 @@
 package edu.food.edufood.controller;
 
-import edu.food.edufood.model.User;
+import edu.food.edufood.dto.UserDTO;
 import edu.food.edufood.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,7 +20,7 @@ public class ProfileController {
     @GetMapping
     public String showProfile(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         String email = userDetails.getUsername();
-        User user = userService.findByEmail(email)
+        UserDTO user = userService.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
 
         model.addAttribute("user", user);
