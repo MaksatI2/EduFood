@@ -23,7 +23,7 @@ public class Restaurant {
     public String photoUrl;
 
     @OneToMany(mappedBy = "restaurant")
-    private Set<Dish> dishes;
+    private Set<Dishes> dishes;
 
     @OneToMany(mappedBy = "restaurant")
     private Set<Order> orders;
