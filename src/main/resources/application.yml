@@ -1,0 +1,52 @@
+server:
+  port: 9090
+spring:
+  application:
+    name: "EduFood"
+  mvc:
+    static-path-pattern: /static/**
+    log-request-details: false
+  freemarker:
+    expose-session-attributes: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        generate_statistics: false
+
+
+  datasource:
+    url: jdbc:h2:./db/eduFood;AUTO_SERVER=TRUE
+    username: maksat
+    password: qwerty
+    driver-class-name: org.h2.Driver
+  liquibase:
+    change-log: classpath:/db/changelog/master.yaml
+
+  h2:
+    console:
+      enabled: true
+
+  output:
+    ansi:
+      enabled: always
+
+logging:
+  level:
+    root: error
+    org:
+      hibernate:
+        type: error
+        stat: error
+      springframework:
+        security: debug
+    web: info
+    sql: error
+
+  file:
+    name: logs/spring.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 7
