@@ -35,6 +35,9 @@ public class OrderController {
 
         Order order = orderService.createOrderFromCart(user);
 
-        return "redirect:/orders/confirmation/" + order.getId();
+        redirectAttributes.addFlashAttribute("success",
+                "Заказ №" + order.getId() + " успешно оформлен! Спасибо за покупку!");
+
+        return "redirect:/profile";
     }
 }
