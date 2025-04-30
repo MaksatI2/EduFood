@@ -27,7 +27,13 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .name(restaurant.getName())
                 .photoUrl(restaurant.getPhotoUrl())
                 .dishes(restaurant.getDishes())
-                .orders(restaurant.getOrders())
                 .build();
     }
+
+    @Override
+    public Restaurant getById(Long id) {
+        return restaurantRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Ресторан не найден"));
+    }
+
 }

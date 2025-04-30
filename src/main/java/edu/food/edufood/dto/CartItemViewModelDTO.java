@@ -3,16 +3,17 @@ package edu.food.edufood.dto;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderDTO {
+public class CartItemViewModelDTO {
     private Long id;
-    private Long userId;
+    private Long dishId;
+    private String dishName;
+    private BigDecimal dishPrice;
+    private Integer quantity;
     private BigDecimal totalPrice;
-    private LocalDateTime createdAt;
 }
