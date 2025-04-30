@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002
+      author: I.Maksat
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: long
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(55)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: enabled
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: account_type
+                  type: int
+        - addForeignKeyConstraint:
+            baseTableName: users
+            baseColumnNames: account_type
+            referencedTableName: authorities
+            referencedColumnNames: id
+            constraintName: fk_users_account_type
