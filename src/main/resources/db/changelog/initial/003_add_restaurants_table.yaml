@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003
+      author: I.Maksat
+      changes:
+        - createTable:
+            tableName: restaurants
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: photo_url
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
