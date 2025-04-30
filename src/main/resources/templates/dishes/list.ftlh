@@ -5,6 +5,20 @@
             <i class="fas fa-utensils me-2"></i>Список блюд
         </h2>
 
+        <#if error??>
+            <div class="alert alert-danger d-flex align-items-center" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <div>${error}</div>
+            </div>
+        </#if>
+
+        <#if success??>
+            <div class="alert alert-success d-flex align-items-center" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <div>${success}</div>
+            </div>
+        </#if>
+
         <#if dishes?? && dishes?size gt 0>
             <div class="row row-cols-1 row-cols-md-3 g-4">
                 <#list dishes as dish>
@@ -43,9 +57,13 @@
                                             —
                                         </#if>
                                     </span>
-                                    <button class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-cart-plus me-1"></i> В корзину
-                                    </button>
+                                    <form action="/orders/cart/add" method="POST" style="margin: 0;">
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                        <input type="hidden" name="dishId" value="${dish.id}">
+                                        <button type="submit" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-cart-plus me-1"></i> В корзину
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
