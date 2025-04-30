@@ -1,21 +1,24 @@
 package edu.food.edufood.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "order_dishes")
-@IdClass(OrderDish.class)
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class OrderDish {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "dish_id", nullable = false)
     private Dishes dish;
