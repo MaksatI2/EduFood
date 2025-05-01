@@ -30,4 +30,10 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .orders(restaurant.getOrders())
                 .build();
     }
+
+    @Override
+    public Page<RestaurantDTO> findByName(String name, Pageable pageable) {
+        return restaurantRepository.findByKeyword(name, pageable)
+                .map(this::convertToDto);
+    }
 }
