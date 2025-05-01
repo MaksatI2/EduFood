@@ -36,10 +36,4 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantRepository.findByKeyword(name, pageable)
                 .map(this::convertToDto);
     }
-
-    public Restaurant getById(Long id) {
-        return restaurantRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("Ресторан не найден"));
-    }
-
 }
