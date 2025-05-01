@@ -9,8 +9,10 @@
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control form-control-lg" placeholder="Введите названия ресторана...">
-                        <button class="btn btn-primary btn-lg" type="button">Найти рестораны</button>
+                        <form method="get" action="restaurants" class="input-group mb-3">
+                            <input type="text" name="search" class="form-control form-control-lg" placeholder="Введите названия ресторана...">
+                            <button class="btn btn-primary btn-lg" type="submit">Найти рестораны</button>
+                        </form>
                     </div>
                 </div>
             </div>
