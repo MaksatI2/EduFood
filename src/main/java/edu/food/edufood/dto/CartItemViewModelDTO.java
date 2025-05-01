@@ -16,4 +16,5 @@ public class CartItemViewModelDTO {
     private BigDecimal dishPrice;
     private Integer quantity;
     private BigDecimal totalPrice;
+    private String restaurantName;
 }
