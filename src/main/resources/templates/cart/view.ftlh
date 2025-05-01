@@ -16,6 +16,7 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Блюдо</th>
+                    <th scope="col">Ресторан</th>
                     <th scope="col">Количество</th>
                     <th scope="col">Цена</th>
                     <th scope="col">Итого</th>
@@ -27,6 +28,7 @@
                     <tr>
                         <td>${item_index + 1}</td>
                         <td><strong>${item.dishName}</strong></td>
+                        <td>${item.restaurantName}</td>
                         <td>
                             <form action="/orders/cart/update" method="post" class="d-flex">
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
