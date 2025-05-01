@@ -23,16 +23,26 @@ public class RestaurantsController {
     public String listRestaurants(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String search,
             Model model) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<RestaurantDTO> restaurantPage = restaurantService.findAll(pageable);
+        Page<RestaurantDTO> restaurantDTO;
 
-        model.addAttribute("restaurants", restaurantPage.getContent());
+        if (search != null) {
+            restaurantDTO = restaurantService.findByName(search, pageable);
+        }else {
+            restaurantDTO = restaurantService.findAll(pageable);
+        }
+
+        model.addAttribute("restaurants", restaurantDTO.getContent());
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", restaurantPage.getTotalPages());
-        model.addAttribute("totalItems", restaurantPage.getTotalElements());
+        model.addAttribute("totalPages", restaurantDTO.getTotalPages());
+        model.addAttribute("totalItems", restaurantDTO.getTotalElements());
+        model.addAttribute("search", search);
 
         return "restaurants/restaurants";
     }
+
+
 }
