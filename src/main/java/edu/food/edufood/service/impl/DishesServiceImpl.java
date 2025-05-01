@@ -5,6 +5,9 @@ import edu.food.edufood.model.Dishes;
 import edu.food.edufood.repository.DishesRepository;
 import edu.food.edufood.service.DishesService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +19,12 @@ public class DishesServiceImpl implements DishesService {
     private final DishesRepository dishRepository;
 
     @Override
-    public List<DishesDTO> getAllDishes() {
-        return dishRepository.findAll()
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    public Page<DishesDTO> getAllDishes(Pageable pageable) {
+        Pageable limitedPageable = pageable.getPageSize() > 9
+                ? PageRequest.of(pageable.getPageNumber(), 9, pageable.getSort())
+                : pageable;
+        return dishRepository.findAll(limitedPageable)
+                .map(this::convertToDTO);
     }
 
     @Override
