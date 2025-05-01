@@ -7,6 +7,13 @@ databaseChangeLog:
             tableName: order_dishes
             columns:
               - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
                   name: order_id
                   type: BIGINT
                   constraints:
@@ -21,9 +28,10 @@ databaseChangeLog:
                   type: INT
                   constraints:
                     nullable: false
-        - addPrimaryKey:
-            columnNames: order_id, dish_id
+        - addUniqueConstraint:
             tableName: order_dishes
+            columnNames: order_id, dish_id
+            constraintName: uk_order_dish_unique
         - addForeignKeyConstraint:
             baseTableName: order_dishes
             baseColumnNames: order_id

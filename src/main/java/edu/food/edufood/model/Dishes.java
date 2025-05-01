@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Set;
 
 @Entity
 @Table(name = "dishes")
@@ -34,7 +33,4 @@ public class Dishes {
     private String description;
 
     private Integer weight;
-
-    @OneToMany(mappedBy = "dish")
-    private Set<OrderDish> orderDishes;
 }

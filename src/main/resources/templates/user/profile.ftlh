@@ -27,6 +27,13 @@
         }
     </style>
 
+    <#if success??>
+        <div class="alert alert-success d-flex align-items-center" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <div>${success}</div>
+        </div>
+    </#if>
+
     <section class="row justify-content-center">
         <div class="col-md-8">
             <div class="profile-card text-center">

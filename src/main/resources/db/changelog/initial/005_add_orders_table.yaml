@@ -16,21 +16,15 @@ databaseChangeLog:
               - column:
                   name: user_id
                   type: BIGINT
-                  constraints:
-                    nullable: false
-              - column:
-                  name: restaurants_id
-                  type: BIGINT
-                  constraints:
-                    nullable: false
               - column:
                   name: total_price
                   type: DECIMAL(10,2)
-                  constraints:
-                    nullable: false
               - column:
                   name: created_at
                   type: TIMESTAMP
+              - column:
+                  name: session_id
+                  type: varchar(255)
                   constraints:
                     nullable: false
         - addForeignKeyConstraint:
@@ -39,9 +33,3 @@ databaseChangeLog:
             referencedTableName: users
             referencedColumnNames: id
             constraintName: fk_order_user
-        - addForeignKeyConstraint:
-            baseTableName: orders
-            baseColumnNames: restaurants_id
-            referencedTableName: restaurants
-            referencedColumnNames: id
-            constraintName: fk_order_restaurants

@@ -2,17 +2,15 @@ package edu.food.edufood.dto;
 
 import lombok.*;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderDTO {
+public class CartItemDTO {
     private Long id;
+    private String sessionId;
+    private Long dishId;
     private Long userId;
-    private BigDecimal totalPrice;
-    private LocalDateTime createdAt;
+    private Integer quantity;
 }

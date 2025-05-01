@@ -48,6 +48,13 @@
                             </div>
                         </#if>
 
+                        <#if authError??>
+                            <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                <div>${authError}</div>
+                            </div>
+                        </#if>
+
                         <#if success??>
                             <div class="alert alert-success d-flex align-items-center" role="alert">
                                 <i class="fas fa-exclamation-circle me-2"></i>
