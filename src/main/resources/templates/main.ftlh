@@ -9,7 +9,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="input-group mb-3">
-                        <form method="get" action="restaurants" class="input-group mb-3">
+                        <form method="get" action="/" class="input-group mb-3">
                             <input type="text" name="search" class="form-control form-control-lg" placeholder="Введите названия ресторана...">
                             <button class="btn btn-primary btn-lg" type="submit">Найти рестораны</button>
                         </form>
@@ -18,6 +18,37 @@
             </div>
         </div>
     </section>
+
+    <#if restaurants?? && restaurants?size gt 0>
+        <section class="container mb-5">
+            <h2 class="mb-4 text-center">Результаты поиска ресторанов</h2>
+            <div class="row">
+                <#list restaurants as restaurant>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="restaurant-card card h-100">
+                            <img src="/static/restaurants/${restaurant.photoUrl}"
+                                 class="card-img-top"
+                                 style="height: 250px; object-fit: cover;"
+                                 alt="${restaurant.name}">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">${restaurant.name}</h5>
+                                <p class="card-text text-muted">
+                                    <#if restaurant.dishes?size gt 0>
+                                        ${restaurant.dishes?size} блюд
+                                    <#else>
+                                        Меню недоступно
+                                    </#if>
+                                </p>
+                                <div class="mt-auto d-flex justify-content-between align-items-center">
+                                    <a href="dishes/restaurants/${restaurant.id}" class="btn btn-outline-primary">Подробнее</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </#list>
+            </div>
+        </section>
+    </#if>
 
     <section class="container mb-5">
         <div class="d-flex justify-content-between align-items-center mb-5">

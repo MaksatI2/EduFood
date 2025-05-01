@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
-    @Query("select r from Restaurant r where lower(r.name) like lower(concat('%', :keyword, '%'))")
+    @Query("select r from Restaurant r where lower(r.name) like lower(concat(:keyword, '%'))")
     Page<Restaurant> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 }
