@@ -62,10 +62,12 @@
             </div>
             <div class="col-md-6">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Поиск ресторанов...">
-                    <button class="btn btn-primary" type="button">
-                        <i class="fas fa-search"></i>
-                    </button>
+                    <form method="get" action="restaurants" class="input-group mb-3">
+                        <input type="text" class="form-control" name="search" placeholder="Поиск ресторанов..." value="${search!}">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
