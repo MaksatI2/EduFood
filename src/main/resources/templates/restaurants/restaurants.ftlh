@@ -46,6 +46,10 @@
         .pagination .page-link {
             color: var(--primary-color);
         }
+
+        .col-lg-4{
+            margin-bottom: 30px;
+        }
     </style>
 
     <section class="restaurants-header text-center">
