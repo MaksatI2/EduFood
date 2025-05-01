@@ -74,6 +74,7 @@ public class CartController {
                 viewModel.setDishName(dish.getName());
                 viewModel.setDishPrice(dish.getPrice());
                 viewModel.setQuantity(item.getQuantity());
+                viewModel.setRestaurantName(dish.getRestaurantName());
                 viewModel.setTotalPrice(dish.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
 
                 viewModels.add(viewModel);

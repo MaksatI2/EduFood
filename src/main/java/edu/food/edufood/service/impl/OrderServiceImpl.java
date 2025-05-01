@@ -9,6 +9,7 @@ import edu.food.edufood.repository.OrderDishRepository;
 import edu.food.edufood.repository.OrderRepository;
 import edu.food.edufood.service.CartService;
 import edu.food.edufood.service.DishesService;
+import edu.food.edufood.service.OrderDishService;
 import edu.food.edufood.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final CartService cartService;
     private final DishesService dishesService;
-    private final OrderDishRepository orderDishRepository;
+    private final OrderDishService orderDishService;
 
     @Override
     public Order createOrderFromCart(User user) {
@@ -46,13 +47,11 @@ public class OrderServiceImpl implements OrderService {
             }
         }
 
-        // Расчет общей суммы
         BigDecimal totalPrice = cartItems.stream()
                 .map(item -> dishesMap.get(item.getDishId()).getPrice()
                         .multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        // Создание заказа
         Order order = Order.builder()
                 .user(user)
                 .totalPrice(totalPrice)
@@ -62,7 +61,6 @@ public class OrderServiceImpl implements OrderService {
 
         Order savedOrder = orderRepository.save(order);
 
-        // Сохранение блюд заказа
         for (CartItemDTO item : cartItems) {
             OrderDish orderDish = OrderDish.builder()
                     .order(savedOrder)
@@ -70,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
                     .quantity(item.getQuantity())
                     .build();
 
-            orderDishRepository.save(orderDish);
+            orderDishService.saveOrderDish(orderDish);
         }
 
         cartService.clearCart();
