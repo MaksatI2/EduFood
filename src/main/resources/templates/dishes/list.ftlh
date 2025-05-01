@@ -4,7 +4,28 @@
         <h2 class="mb-4">
             <i class="fas fa-utensils me-2"></i>Список блюд
         </h2>
+        <style>
+            :root {
+                --pagination-active-bg: #ff6b6b;
+                --pagination-active-border: #ff6b6b;
+                --pagination-color: #ff6b6b;
+                --pagination-hover-color: #d63031;
+            }
 
+            .pagination .page-item.active .page-link {
+                background-color: var(--pagination-active-bg);
+                border-color: var(--pagination-active-border);
+                color: white;
+            }
+
+            .pagination .page-link {
+                color: var(--pagination-color);
+            }
+
+            .pagination .page-link:hover {
+                color: var(--pagination-hover-color);
+            }
+        </style>
         <#if dishes?? && dishes?size gt 0>
             <div class="row row-cols-1 row-cols-md-3 g-4">
                 <#list dishes.content as dish>
