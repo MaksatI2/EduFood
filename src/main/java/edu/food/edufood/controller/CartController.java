@@ -27,10 +27,11 @@ public class CartController {
     @PostMapping("/add")
     public String addToCart(
             @RequestParam("dishId") Long dishId,
+            @RequestParam(value = "quantity", defaultValue = "1") int quantity,
             HttpServletRequest request,
             RedirectAttributes redirectAttributes) {
 
-        cartService.addToCart(dishId);
+        cartService.addToCart(dishId, quantity);
         redirectAttributes.addFlashAttribute("success", "Блюдо добавлено в корзину!");
 
         String referer = request.getHeader("Referer");
@@ -52,39 +53,8 @@ public class CartController {
 
     @GetMapping
     public String viewCart(Model model) {
-        List<CartItemDTO> cartItems = cartService.getCartItems();
-
-        List<Long> dishIds = cartItems.stream()
-                .map(CartItemDTO::getDishId)
-                .collect(Collectors.toList());
-
-        List<DishesDTO> dishes = dishesService.getDishesByIds(dishIds);
-        Map<Long, DishesDTO> dishesMap = dishes.stream()
-                .collect(Collectors.toMap(DishesDTO::getId, dish -> dish));
-
-        List<CartItemViewModelDTO> viewModels = new ArrayList<>();
-        BigDecimal totalPrice = BigDecimal.ZERO;
-
-        for (CartItemDTO item : cartItems) {
-            DishesDTO dish = dishesMap.get(item.getDishId());
-            if (dish != null) {
-                CartItemViewModelDTO viewModel = new CartItemViewModelDTO();
-                viewModel.setId(item.getId());
-                viewModel.setDishId(item.getDishId());
-                viewModel.setDishName(dish.getName());
-                viewModel.setDishPrice(dish.getPrice());
-                viewModel.setQuantity(item.getQuantity());
-                viewModel.setRestaurantName(dish.getRestaurantName());
-                viewModel.setTotalPrice(dish.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
-
-                viewModels.add(viewModel);
-                totalPrice = totalPrice.add(viewModel.getTotalPrice());
-            }
-        }
-
-        model.addAttribute("cartItems", viewModels);
-        model.addAttribute("totalPrice", totalPrice);
-
+        Map<String, Object> cartViewModel = cartService.prepareCartViewModel();
+        model.addAllAttributes(cartViewModel);
         return "cart/view";
     }
 
