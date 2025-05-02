@@ -1,7 +1,6 @@
 package edu.food.edufood.dto;
 
 import lombok.*;
-
 import java.math.BigDecimal;
 
 @Getter
@@ -9,12 +8,11 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CartItemViewModelDTO {
-    private Long id;
-    private Long dishId;
-    private String dishName;
-    private BigDecimal dishPrice;
+public class OrderDishDetailsDTO {
+    private String name;
+    private String photoUrl;
+    private BigDecimal price;
     private Integer quantity;
-    private BigDecimal totalPrice;
     private String restaurantName;
+    private String restaurantPhotoUrl;
 }

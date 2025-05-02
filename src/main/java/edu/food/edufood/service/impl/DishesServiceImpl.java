@@ -60,4 +60,10 @@ public class DishesServiceImpl implements DishesService {
                 .collect(Collectors.toMap(Dishes::getId, dish -> dish));
     }
 
+    @Override
+    public Dishes getDishById(Long dishId) {
+        return dishRepository.findById(dishId)
+                .orElseThrow(() -> new RuntimeException("Блюдо не найдено"));
+    }
+
 }

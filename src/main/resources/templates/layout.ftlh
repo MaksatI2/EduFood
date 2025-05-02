@@ -7,6 +7,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>${title}</title>
+    <link rel="stylesheet" href="/static/css/header.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
     <link rel="icon" href="/static/images/EduFood2.png" type="image/x-icon">
@@ -20,11 +21,15 @@
         <a class="navbar-brand" href="/">
             <i class="fas fa-utensils me-2"></i>EduFood
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
+        <input type="checkbox" id="burger-toggle">
+        <label class="burger-label" for="burger-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+
+        <div class="navbar-collapse">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a href="/" class="nav-link <#if activeNav == "home">active</#if>">Главная</a>

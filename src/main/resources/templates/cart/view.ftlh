@@ -1,5 +1,39 @@
 <#import "../layout.ftlh" as layout>
 <@layout.page title="Корзина" styles="/static/css/main.css" activeNav="basket">
+    <style>
+        /* Стили для кнопок изменения количества */
+        .quantity-control {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-input {
+            width: 50px;
+            height: 30px;
+            text-align: center;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+        }
+
+        /* Скрываем стандартные кнопки input[type=number] */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+
     <h1 class="my-4">Ваша корзина</h1>
 
     <#if cartItems?size == 0>
@@ -16,6 +50,7 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Блюдо</th>
+                    <th scope="col">Ресторан</th>
                     <th scope="col">Количество</th>
                     <th scope="col">Цена</th>
                     <th scope="col">Итого</th>
@@ -27,21 +62,32 @@
                     <tr>
                         <td>${item_index + 1}</td>
                         <td><strong>${item.dishName}</strong></td>
+                        <td>${item.restaurantName}</td>
                         <td>
-                            <form action="/orders/cart/update" method="post" class="d-flex">
+                            <form action="/orders/cart/update" method="post" class="quantity-control">
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                 <input type="hidden" name="dishId" value="${item.dishId}" />
-                                <input type="number" name="quantity" value="${item.quantity}" min="1" class="form-control me-2" style="width: 80px;" />
-                                <button class="btn btn-outline-primary btn-sm" type="submit"><i class="fas fa-sync-alt"></i></button>
+
+                                <button type="submit" name="quantity" value="${item.quantity - 1}"
+                                        class="quantity-btn" <#if item.quantity <= 1>disabled</#if>>
+                                    -
+                                </button>
+                                <span class="quantity-input">${item.quantity}</span>
+                                <button type="submit" name="quantity" value="${item.quantity + 1}"
+                                        class="quantity-btn">
+                                    +
+                                </button>
                             </form>
                         </td>
                         <td>${item.dishPrice?string["#,##0.00"]} сом</td>
                         <td>${item.totalPrice?string["#,##0.00"]} сом</td>
                         <td>
-                            <form action="/orders/cart/remove" method="post" onsubmit="return confirm('Удалить товар из корзины?');">
+                            <form action="/orders/cart/remove" method="post">
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                 <input type="hidden" name="dishId" value="${item.dishId}" />
-                                <button class="btn btn-outline-danger btn-sm" type="submit"><i class="fas fa-trash"></i></button>
+                                <button class="btn btn-outline-danger btn-sm" type="submit">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </form>
                         </td>
                     </tr>
@@ -58,14 +104,18 @@
         </div>
 
         <div class="d-flex justify-content-between align-items-center mt-4">
-            <form action="/orders/cart/clear" method="post" onsubmit="return confirm('Очистить всю корзину?');">
+            <form action="/orders/cart/clear" method="post">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                <button class="btn btn-danger" type="submit"><i class="fas fa-trash-alt me-1"></i>Очистить корзину</button>
+                <button class="btn btn-danger" type="submit">
+                    <i class="fas fa-trash-alt me-1"></i>Очистить корзину
+                </button>
             </form>
 
             <form action="/orders/create" method="post">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                <button class="btn btn-success btn-lg" type="submit"><i class="fas fa-credit-card me-2"></i>Оформить заказ</button>
+                <button class="btn btn-success btn-lg" type="submit">
+                    <i class="fas fa-credit-card me-2"></i>Оформить заказ
+                </button>
             </form>
         </div>
     </#if>

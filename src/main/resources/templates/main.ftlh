@@ -8,8 +8,9 @@
             <p class="lead mb-5">Более 100 ресторанов с быстрой доставкой до двери</p>
             <div class="row justify-content-center">
                 <div class="col-md-8">
-                    <div class="input-group mb-3">
+
                         <form method="get" action="/" class="input-group mb-3">
+
                             <input type="text" name="search" class="form-control form-control-lg" placeholder="Введите названия ресторана...">
                             <button class="btn btn-primary btn-lg" type="submit">Найти рестораны</button>
                         </form>

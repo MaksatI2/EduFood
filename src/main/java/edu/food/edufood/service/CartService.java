@@ -4,10 +4,11 @@ import edu.food.edufood.dto.CartItemDTO;
 import edu.food.edufood.model.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CartService {
 
-    void addToCart(Long dishId);
+    void addToCart(Long dishId, int quantity);
 
     void removeFromCart(Long dishId);
 
@@ -18,4 +19,6 @@ public interface CartService {
     void clearCart();
 
     void transferCartItemsToUser(User user);
+
+    Map<String, Object> prepareCartViewModel();
 }

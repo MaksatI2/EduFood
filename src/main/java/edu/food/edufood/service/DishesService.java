@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface DishesService {
+    Dishes getDishById(Long dishId);
     List<DishesDTO> getAllDishes();
     List<DishesDTO> getDishesByRestaurantId(Long restaurantId);
     List<DishesDTO> getDishesByIds(List<Long> dishIds);

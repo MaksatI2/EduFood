@@ -31,7 +31,6 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-
     public Page<RestaurantDTO> findByName(String name, Pageable pageable) {
         return restaurantRepository.findByKeyword(name, pageable)
                 .map(this::convertToDto);
@@ -41,5 +40,4 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Ресторан не найден"));
     }
-
 }
