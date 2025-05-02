@@ -58,31 +58,43 @@
 
                         <form action="/auth/register" method="post">
                             <#if _csrf??>
-                                <input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"
-                                       value="${(_csrf.token)!'csrf-token'}"/>
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             </#if>
+
                             <div class="mb-3">
                                 <label for="username" class="form-label">Имя пользователя</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light"><i class="fas fa-user"></i></span>
-                                    <input type="text" class="form-control" id="username" name="username" placeholder="Введите имя пользователя" required>
+                                    <@spring.bind "user.username" />
+                                    <input type="text" name="username" class="form-control <#if spring.status.error??>is-invalid</#if>" id="username" value="${spring.status.value!}" placeholder="Введите имя пользователя">
                                 </div>
+                                <#if spring.status.error??>
+                                    <div class="invalid-feedback d-block mt-1">${spring.status.errorMessage}</div>
+                                </#if>
                             </div>
 
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light"><i class="fas fa-envelope"></i></span>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="Введите email" required>
+                                    <@spring.bind "user.email" />
+                                    <input type="email" name="email" class="form-control <#if spring.status.error??>is-invalid</#if>" id="email" value="${spring.status.value!}" placeholder="Введите email">
                                 </div>
+                                <#if spring.status.error??>
+                                    <div class="invalid-feedback d-block mt-1">${spring.status.errorMessage}</div>
+                                </#if>
                             </div>
 
                             <div class="mb-4">
-                                <label for="password" class="form-label">Пароль</label>
+                                <label for="password" class="form-label">Пароль (минимум 6 символов)</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light"><i class="fas fa-lock"></i></span>
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="Введите пароль" required>
+                                    <@spring.bind "user.password" />
+                                    <input type="password" name="password" class="form-control <#if spring.status.error??>is-invalid</#if>" id="password" placeholder="Введите пароль">
                                 </div>
+                                <#if spring.status.error??>
+                                    <div class="invalid-feedback d-block mt-1">${spring.status.errorMessage}</div>
+                                </#if>
                             </div>
 
                             <div class="d-grid">

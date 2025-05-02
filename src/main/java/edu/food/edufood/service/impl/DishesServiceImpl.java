@@ -21,19 +21,17 @@ public class DishesServiceImpl implements DishesService {
 
     @Override
     public Page<DishesDTO> getAllDishes(Pageable pageable) {
-        Pageable limitedPageable = pageable.getPageSize() > 9
-                ? PageRequest.of(pageable.getPageNumber(), 9, pageable.getSort())
+        Pageable limitedPageable = pageable.getPageSize() > 10
+                ? PageRequest.of(pageable.getPageNumber(), 10, pageable.getSort())
                 : pageable;
         return dishRepository.findAll(limitedPageable)
                 .map(this::convertToDTO);
     }
 
     @Override
-    public List<DishesDTO> getDishesByRestaurantId(Long restaurantId) {
-        return dishRepository.findByRestaurantId(restaurantId)
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    public Page<DishesDTO> getDishesByRestaurantId(Long restaurantId, Pageable pageable) {
+        return dishRepository.findByRestaurantId(restaurantId, pageable)
+                .map(this::convertToDTO);
     }
 
     private DishesDTO convertToDTO(Dishes dish) {

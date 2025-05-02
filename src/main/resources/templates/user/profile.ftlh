@@ -30,15 +30,6 @@
             font-size: 1rem;
             color: #57606f;
         }
-
-        .section-title {
-            font-weight: bold;
-            font-size: 1.3rem;
-            color: #2f3542;
-            margin-top: 30px;
-            margin-bottom: 15px;
-        }
-
         .btn-orders {
             background-color: #ffa502;
             border: none;

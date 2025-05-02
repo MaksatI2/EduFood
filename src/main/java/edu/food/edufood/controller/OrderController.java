@@ -6,6 +6,8 @@ import edu.food.edufood.model.User;
 import edu.food.edufood.service.OrderHistoryService;
 import edu.food.edufood.service.OrderService;
 import edu.food.edufood.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,7 +30,9 @@ public class OrderController {
     private final UserService userService;
 
     @PostMapping("/create")
-    public String createOrder(RedirectAttributes redirectAttributes) {
+    public String createOrder(HttpServletRequest request,
+                              HttpServletResponse response,
+                              RedirectAttributes redirectAttributes) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
@@ -40,7 +44,7 @@ public class OrderController {
         User user = userService.getUserEntityByEmail(userEmail)
                 .orElseThrow(() -> new IllegalStateException("Пользователь не найден"));
 
-        Order order = orderService.createOrderFromCart(user);
+        Order order = orderService.createOrderFromCart(user, request, response);
 
         redirectAttributes.addFlashAttribute("success",
                 "Заказ №" + order.getId() + " успешно оформлен! Спасибо за покупку!");

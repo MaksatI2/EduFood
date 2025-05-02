@@ -1,11 +1,14 @@
 package edu.food.edufood.service.impl;
 
 import edu.food.edufood.dto.UserDTO;
+import edu.food.edufood.exception.InvalidRegisterException;
 import edu.food.edufood.model.AccountType;
 import edu.food.edufood.model.User;
 import edu.food.edufood.repository.UserRepository;
 import edu.food.edufood.service.CartService;
 import edu.food.edufood.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,9 +23,10 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void registerUser(UserDTO dto) {
+    @Override
+    public void registerUser(UserDTO dto, HttpServletRequest request, HttpServletResponse response) {
         if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
-            throw new RuntimeException("Email уже используется");
+            throw new InvalidRegisterException("email", "Email уже используется");
         }
 
         User user = new User();
@@ -33,7 +37,7 @@ public class UserServiceImpl implements UserService {
         user.setEnabled(true);
 
         User savedUser = userRepository.save(user);
-        cartService.transferCartItemsToUser(savedUser);
+        cartService.transferCartItemsToUser(savedUser.getId(), request, response);
     }
 
     @Override

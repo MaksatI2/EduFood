@@ -49,12 +49,12 @@
         .social-icon:hover {
             color: #f1f1f1;
         }
-
-        footer .contacts {
-            color: #ccc;
+        .badge {
+            font-size: 0.7em;
+            vertical-align: top;
+            margin-left: 2px;
         }
     </style>
-
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
@@ -82,7 +82,13 @@
                     <a href="/dishes" class="nav-link <#if activeNav == "dishes">active</#if>">Блюда</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/orders/cart" class="nav-link <#if activeNav == "basket">active</#if>">Корзина<i class="fas fa-shopping-cart ms-1"></i></a>
+                    <a href="/orders/cart" class="nav-link <#if activeNav == "basket">active</#if>">
+                        Корзина
+                        <i class="fas fa-shopping-cart ms-1"></i>
+                        <#if cartItemCount?? && (cartItemCount > 0)>
+                            <span class="badge bg-primary rounded-pill">${cartItemCount}</span>
+                        </#if>
+                    </a>
                 </li>
             </ul>
 

@@ -1,5 +1,7 @@
 package edu.food.edufood.exception;
 
+import edu.food.edufood.service.CartService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
@@ -8,6 +10,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -18,6 +21,13 @@ import java.util.Map;
 @ControllerAdvice
 @RequiredArgsConstructor
 public class GlobalControllerAdvice {
+
+    private final CartService cartService;
+
+    @ModelAttribute("cartItemCount")
+    public int getCartItemCount(HttpServletRequest request) {
+        return cartService.getTotalItemsCount(request);
+    }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ModelAndView handleAccessDenied(AccessDeniedException e, RedirectAttributes redirectAttributes) {
@@ -64,6 +74,14 @@ public class GlobalControllerAdvice {
     public ModelAndView handleAllOtherExceptions(Exception e) {
         ModelAndView mav = new ModelAndView("errors/400");
         mav.addObject("error",  e.getMessage());
+        return mav;
+    }
+
+    @ExceptionHandler(InvalidRegisterException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ModelAndView handleInvalidRegisterException(InvalidRegisterException e) {
+        ModelAndView mav = new ModelAndView("auth/register");
+        mav.addObject("error", e.getMessage());
         return mav;
     }
 }
