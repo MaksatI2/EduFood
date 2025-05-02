@@ -41,27 +41,17 @@
                         <h2 class="text-center mb-4">Вход в систему</h2>
                         <p class="text-center text-muted mb-4">Войдите, чтобы продолжить заказ</p>
 
-                        <#if error??>
-                            <div class="alert alert-danger d-flex align-items-center" role="alert">
-                                <i class="fas fa-exclamation-circle me-2"></i>
-                                <div>${error}</div>
+                        <#if loginError??>
+                            <div class="global-error">
+                                ${loginError}
                             </div>
                         </#if>
 
-                        <#if authError??>
-                            <div class="alert alert-danger d-flex align-items-center" role="alert">
-                                <i class="fas fa-exclamation-circle me-2"></i>
-                                <div>${authError}</div>
+                        <#if registrationSuccess??>
+                            <div class="alert-success">
+                                ${registrationSuccess}
                             </div>
                         </#if>
-
-                        <#if success??>
-                            <div class="alert alert-success d-flex align-items-center" role="alert">
-                                <i class="fas fa-exclamation-circle me-2"></i>
-                                <div>${success}</div>
-                            </div>
-                        </#if>
-
                         <form method="post" action="/login">
                             <#if _csrf??>
                                 <input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"
@@ -71,7 +61,7 @@
                                 <label for="email" class="form-label">Электронная почта</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light"><i class="fas fa-envelope"></i></span>
-                                    <input type="email" class="form-control" id="email" name="username" placeholder="Введите email" required>
+                                    <input type="email" class="form-control" id="email" name="username" placeholder="Введите email">
                                 </div>
                             </div>
 
@@ -79,7 +69,7 @@
                                 <label for="password" class="form-label">Пароль</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light"><i class="fas fa-lock"></i></span>
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="Введите пароль" required>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Введите пароль">
                                 </div>
                             </div>
 
