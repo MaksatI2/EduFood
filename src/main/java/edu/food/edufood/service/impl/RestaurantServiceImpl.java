@@ -27,7 +27,17 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .name(restaurant.getName())
                 .photoUrl(restaurant.getPhotoUrl())
                 .dishes(restaurant.getDishes())
-                .orders(restaurant.getOrders())
                 .build();
+    }
+
+    @Override
+    public Page<RestaurantDTO> findByName(String name, Pageable pageable) {
+        return restaurantRepository.findByKeyword(name, pageable)
+                .map(this::convertToDto);
+    }
+
+    public Restaurant getById(Long id) {
+        return restaurantRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Ресторан не найден"));
     }
 }

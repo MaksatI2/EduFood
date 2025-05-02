@@ -4,6 +4,7 @@ import edu.food.edufood.dto.UserDTO;
 import edu.food.edufood.model.AccountType;
 import edu.food.edufood.model.User;
 import edu.food.edufood.repository.UserRepository;
+import edu.food.edufood.service.CartService;
 import edu.food.edufood.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +15,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private final CartService cartService;
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -30,7 +32,8 @@ public class UserServiceImpl implements UserService {
         user.setAccountType(AccountType.USER);
         user.setEnabled(true);
 
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        cartService.transferCartItemsToUser(savedUser);
     }
 
     @Override
@@ -46,4 +49,10 @@ public class UserServiceImpl implements UserService {
                     return dto;
                 });
     }
+
+    @Override
+    public Optional<User> getUserEntityByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
 }

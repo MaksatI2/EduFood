@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,4 +48,26 @@ public class DishesServiceImpl implements DishesService {
                 .restaurantName(dish.getRestaurant().getName())
                 .build();
     }
+
+    @Override
+    public List<DishesDTO> getDishesByIds(List<Long> dishIds) {
+        return dishRepository.findAllById(dishIds)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<Long, Dishes> getDishesMapByIds(List<Long> ids) {
+        return dishRepository.findAllById(ids)
+                .stream()
+                .collect(Collectors.toMap(Dishes::getId, dish -> dish));
+    }
+
+    @Override
+    public Dishes getDishById(Long dishId) {
+        return dishRepository.findById(dishId)
+                .orElseThrow(() -> new RuntimeException("Блюдо не найдено"));
+    }
+
 }
