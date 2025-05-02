@@ -54,6 +54,9 @@ public class CartController {
     public String viewCart(Model model) {
         List<CartItemDTO> cartItems = cartService.getCartItems();
 
+        int count = cartItems.stream()
+                .mapToInt(CartItemDTO::getQuantity).sum();
+
         List<Long> dishIds = cartItems.stream()
                 .map(CartItemDTO::getDishId)
                 .collect(Collectors.toList());
@@ -83,6 +86,7 @@ public class CartController {
 
         model.addAttribute("cartItems", viewModels);
         model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("totalItems", count);
 
         return "cart/view";
     }

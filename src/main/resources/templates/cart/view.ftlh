@@ -11,6 +11,7 @@
         </div>
     <#else>
         <div class="table-responsive">
+            <h6>Все рестораны <span class="badge bg-primary rounded-pill">${totalItems}</span></h6>
             <table class="table align-middle table-hover">
                 <thead class="table-light">
                 <tr>
