@@ -90,7 +90,27 @@
         <h2 class="mb-4">
             <i class="fas fa-utensils me-2"></i>Список блюд
         </h2>
+        <style>
+            :root {
+                --pagination-active-bg: #ff6b6b;
+                --pagination-active-border: #ff6b6b;
+                --pagination-color: #ff6b6b;
+                --pagination-hover-color: #d63031;
+            }
+            .pagination .page-item.active .page-link {
+                background-color: var(--pagination-active-bg);
+                border-color: var(--pagination-active-border);
+                color: white;
+            }
 
+            .pagination .page-link {
+                color: var(--pagination-color);
+            }
+
+            .pagination .page-link:hover {
+                color: var(--pagination-hover-color);
+            }
+        </style>
         <#if error??>
             <div class="alert alert-danger d-flex align-items-center" role="alert">
                 <i class="fas fa-exclamation-circle me-2"></i>
@@ -107,7 +127,7 @@
 
         <#if dishes?? && dishes?size gt 0>
             <div class="row row-cols-1 row-cols-md-3 g-4">
-                <#list dishes as dish>
+                <#list dishes.content as dish>
                     <div class="col">
                         <div class="card h-100 shadow-sm">
                             <#if dish.photoUrl??>
@@ -183,6 +203,38 @@
                         </div>
                     </div>
                 </#list>
+            </div>
+        <nav class="mt-4" aria-label="Навигация по страницам">
+            <ul class="pagination justify-content-center">
+                <li class="page-item <#if dishes.first>disabled</#if>">
+                    <a class="page-link" href="?page=0&size=${dishes.size}" aria-label="Первая">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item <#if dishes.first>disabled</#if>">
+                    <a class="page-link" href="?page=${dishes.number-1}&size=${dishes.size}" aria-label="Предыдущая">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <#list 1..dishes.totalPages as p>
+                    <li class="page-item <#if (dishes.number+1) == p>active</#if>">
+                        <a class="page-link" href="?page=${p-1}&size=${dishes.size}">${p}</a>
+                    </li>
+                </#list>
+                <li class="page-item <#if dishes.last>disabled</#if>">
+                    <a class="page-link" href="?page=${dishes.number+1}&size=${dishes.size}" aria-label="Следующая">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item <#if dishes.last>disabled</#if>">
+                    <a class="page-link" href="?page=${dishes.totalPages-1}&size=${dishes.size}" aria-label="Последняя">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+            <div class="text-center text-muted mt-2">
+                Показано ${dishes.number*dishes.size+1}-${dishes.number*dishes.size + dishes.numberOfElements} из ${dishes.totalElements} блюд
             </div>
         <#else>
             <div class="alert alert-info">
