@@ -10,6 +10,5 @@ public interface RestaurantService {
 
     Page<RestaurantDTO> findByName(String name, Pageable pageable);
 
-    Restaurant getById(Long id);
 
 }
