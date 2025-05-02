@@ -1,151 +1,287 @@
 package edu.food.edufood.service.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.food.edufood.dto.CartItemDTO;
 import edu.food.edufood.dto.CartItemViewModelDTO;
 import edu.food.edufood.dto.DishesDTO;
-import edu.food.edufood.model.User;
 import edu.food.edufood.service.CartService;
 import edu.food.edufood.service.DishesService;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
 
-    private final HttpSession httpSession;
     private final DishesService dishesService;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final String CART_SESSION_KEY = "userCart";
+    private static final String CART_COOKIE_NAME = "userCart";
+    private static final String ANONYMOUS_CART_COOKIE_NAME = "anonymousCart";
 
-    @Override
-    public void addToCart(Long dishId, int quantity) {
-        List<CartItemDTO> cartItems = getCartItemsFromSession();
-
-        boolean dishExists = false;
-        for (CartItemDTO item : cartItems) {
-            if (Objects.equals(item.getDishId(), dishId)) {
-                item.setQuantity(item.getQuantity() + quantity);
-                dishExists = true;
-                break;
+    private Long getCurrentUserId() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
+            if (auth.getPrincipal() instanceof CustomUserDetails userDetails) {
+                return userDetails.getUserId();
             }
         }
+        return null;
+    }
 
-        if (!dishExists) {
-            CartItemDTO newItem = new CartItemDTO();
-            newItem.setDishId(dishId);
-            newItem.setQuantity(quantity);
-            newItem.setSessionId(httpSession.getId());
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
-                if (auth.getPrincipal() instanceof CustomUserDetails userDetails) {
-                    newItem.setUserId(userDetails.getUserId());
+    private String getCartCookieName(HttpServletRequest request) {
+        Long userId = getCurrentUserId();
+        if (userId != null) {
+            return CART_COOKIE_NAME + "_" + userId;
+        }
+        return ANONYMOUS_CART_COOKIE_NAME + "_" + request.getSession().getId();
+    }
+
+    private List<CartItemDTO> getCartFromCookies(HttpServletRequest request) {
+        String cartCookieName = getCartCookieName(request);
+        try {
+            for (Cookie cookie : Optional.ofNullable(request.getCookies()).orElse(new Cookie[0])) {
+                if (cartCookieName.equals(cookie.getName())) {
+                    String json = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+                    return objectMapper.readValue(json, new TypeReference<>() {});
                 }
             }
-            cartItems.add(newItem);
+        } catch (Exception ignored) {}
+        return new ArrayList<>();
+    }
+
+    private void saveCartToCookies(List<CartItemDTO> cartItems, HttpServletResponse response, HttpServletRequest request) {
+        try {
+            String cartCookieName = getCartCookieName(request);
+            String json = objectMapper.writeValueAsString(cartItems);
+            String encoded = URLEncoder.encode(json, StandardCharsets.UTF_8);
+            Cookie cookie = new Cookie(cartCookieName, encoded);
+            cookie.setPath("/");
+            cookie.setHttpOnly(true);
+            cookie.setMaxAge(60 * 60 * 24 * 7); // 7 дней
+            response.addCookie(cookie);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        httpSession.setAttribute(CART_SESSION_KEY, cartItems);
     }
 
     @Override
-    public void removeFromCart(Long dishId) {
-        List<CartItemDTO> cartItems = getCartItemsFromSession();
+    public void removeFromCart(Long dishId, HttpServletRequest request, HttpServletResponse response) {
+        List<CartItemDTO> cartItems = getCartFromCookies(request);
         cartItems.removeIf(item -> Objects.equals(item.getDishId(), dishId));
-        httpSession.setAttribute(CART_SESSION_KEY, cartItems);
+        saveCartToCookies(cartItems, response, request);
     }
 
     @Override
-    public void updateCartItemQuantity(Long dishId, int quantity) {
-        List<CartItemDTO> cartItems = getCartItemsFromSession();
+    public void updateCartItemQuantity(Long dishId, int quantity, HttpServletRequest request, HttpServletResponse response) {
+        List<CartItemDTO> cartItems = getCartFromCookies(request);
         for (CartItemDTO item : cartItems) {
             if (Objects.equals(item.getDishId(), dishId)) {
                 item.setQuantity(quantity);
                 break;
             }
         }
-        httpSession.setAttribute(CART_SESSION_KEY, cartItems);
+        saveCartToCookies(cartItems, response, request);
     }
 
     @Override
-    public List<CartItemDTO> getCartItems() {
-        return getCartItemsFromSession();
+    public void clearCart(HttpServletRequest request, HttpServletResponse response) {
+        String cartCookieName = getCartCookieName(request);
+        Cookie cookie = new Cookie(cartCookieName, "");
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
     }
 
     @Override
-    public void clearCart() {
-        httpSession.removeAttribute(CART_SESSION_KEY);
-    }
-
-    @Override
-    public void transferCartItemsToUser(User user) {
-        List<CartItemDTO> cartItems = getCartItemsFromSession();
+    public void addToCart(Long dishId, int quantity, HttpServletRequest request, HttpServletResponse response) {
+        List<CartItemDTO> cartItems = getCartFromCookies(request);
 
         for (CartItemDTO item : cartItems) {
-            item.setUserId(user.getId());
-        }
-
-        httpSession.setAttribute(CART_SESSION_KEY, cartItems);
-    }
-
-    @Override
-    public Map<String, Object> prepareCartViewModel() {
-        Map<String, Object> model = new HashMap<>();
-
-        List<CartItemDTO> cartItems = getCartItems();
-        List<Long> dishIds = cartItems.stream()
-                .map(CartItemDTO::getDishId)
-                .collect(Collectors.toList());
-
-        List<DishesDTO> dishes = dishesService.getDishesByIds(dishIds);
-        Map<Long, DishesDTO> dishesMap = dishes.stream()
-                .collect(Collectors.toMap(DishesDTO::getId, dish -> dish));
-
-        List<CartItemViewModelDTO> viewModels = new ArrayList<>();
-        BigDecimal totalPrice = BigDecimal.ZERO;
-
-        for (CartItemDTO item : cartItems) {
-            DishesDTO dish = dishesMap.get(item.getDishId());
-            if (dish != null) {
-                CartItemViewModelDTO viewModel = new CartItemViewModelDTO();
-                viewModel.setId(item.getId());
-                viewModel.setDishId(item.getDishId());
-                viewModel.setDishName(dish.getName());
-                viewModel.setDishPrice(dish.getPrice());
-                viewModel.setQuantity(item.getQuantity());
-                viewModel.setRestaurantName(dish.getRestaurantName());
-                viewModel.setTotalPrice(dish.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
-
-                viewModels.add(viewModel);
-                totalPrice = totalPrice.add(viewModel.getTotalPrice());
+            if (Objects.equals(item.getDishId(), dishId)) {
+                item.setQuantity(item.getQuantity() + quantity);
+                saveCartToCookies(cartItems, response, request);
+                return;
             }
         }
 
-        model.put("cartItems", viewModels);
-        model.put("totalPrice", totalPrice);
+        CartItemDTO newItem = new CartItemDTO();
+        newItem.setDishId(dishId);
+        newItem.setQuantity(quantity);
 
+        Long userId = getCurrentUserId();
+        if (userId != null) {
+            newItem.setUserId(userId);
+        }
+
+        cartItems.add(newItem);
+        saveCartToCookies(cartItems, response, request);
+    }
+
+    @Override
+    public List<CartItemDTO> getCartItems(HttpServletRequest request) {
+        return getCartFromCookies(request);
+    }
+
+    @Override
+    public void transferCartItemsToUser(Long userId, HttpServletRequest request, HttpServletResponse response) {
+        String anonymousCookieName = ANONYMOUS_CART_COOKIE_NAME + "_" + request.getSession().getId();
+        List<CartItemDTO> anonymousCart = new ArrayList<>();
+
+        try {
+            for (Cookie cookie : Optional.ofNullable(request.getCookies()).orElse(new Cookie[0])) {
+                if (anonymousCookieName.equals(cookie.getName())) {
+                    String json = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+                    anonymousCart = objectMapper.readValue(json, new TypeReference<>() {});
+                    break;
+                }
+            }
+        } catch (Exception ignored) {}
+
+        if (anonymousCart.isEmpty()) return;
+        String userCookieName = CART_COOKIE_NAME + "_" + userId;
+        List<CartItemDTO> userCart = new ArrayList<>();
+
+        try {
+            for (Cookie cookie : Optional.ofNullable(request.getCookies()).orElse(new Cookie[0])) {
+                if (userCookieName.equals(cookie.getName())) {
+                    String json = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+                    userCart = objectMapper.readValue(json, new TypeReference<>() {});
+                    break;
+                }
+            }
+        } catch (Exception ignored) {}
+        Map<Long, CartItemDTO> userCartMap = userCart.stream()
+                .collect(Collectors.toMap(CartItemDTO::getDishId, item -> item));
+
+        for (CartItemDTO anonymousItem : anonymousCart) {
+            anonymousItem.setUserId(userId);
+
+            if (userCartMap.containsKey(anonymousItem.getDishId())) {
+                CartItemDTO userItem = userCartMap.get(anonymousItem.getDishId());
+                userItem.setQuantity(userItem.getQuantity() + anonymousItem.getQuantity());
+            } else {
+                userCart.add(anonymousItem);
+            }
+        }
+
+        try {
+            String json = objectMapper.writeValueAsString(userCart);
+            String encoded = URLEncoder.encode(json, StandardCharsets.UTF_8);
+            Cookie cookie = new Cookie(userCookieName, encoded);
+            cookie.setPath("/");
+            cookie.setHttpOnly(true);
+            cookie.setMaxAge(60 * 60 * 24 * 7); // 7 дней
+            response.addCookie(cookie);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Cookie clearCookie = new Cookie(anonymousCookieName, "");
+        clearCookie.setPath("/");
+        clearCookie.setMaxAge(0);
+        response.addCookie(clearCookie);
+    }
+
+    @Override
+    public Map<String, Object> prepareCartViewModel(HttpServletRequest request) {
+        Map<String, Object> model = new HashMap<>();
+        List<CartItemDTO> cartItems = getCartItems(request);
+
+        List<DishesDTO> dishes = dishesService.getDishesByIds(
+                cartItems.stream().map(CartItemDTO::getDishId).toList());
+
+        Map<Long, DishesDTO> dishMap = dishes.stream()
+                .collect(Collectors.toMap(DishesDTO::getId, d -> d));
+
+        BigDecimal total = BigDecimal.ZERO;
+        List<CartItemViewModelDTO> viewList = new ArrayList<>();
+
+        for (CartItemDTO item : cartItems) {
+            DishesDTO dish = dishMap.get(item.getDishId());
+            if (dish != null) {
+                CartItemViewModelDTO view = new CartItemViewModelDTO();
+                view.setDishId(item.getDishId());
+                view.setDishName(dish.getName());
+                view.setQuantity(item.getQuantity());
+                view.setDishPrice(dish.getPrice());
+                view.setRestaurantName(dish.getRestaurantName());
+                view.setTotalPrice(dish.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+
+                total = total.add(view.getTotalPrice());
+                viewList.add(view);
+            }
+        }
+
+        model.put("cartItems", viewList);
+        model.put("totalPrice", total);
         return model;
     }
 
-    private List<CartItemDTO> getCartItemsFromSession() {
-        @SuppressWarnings("unchecked")
-        List<CartItemDTO> cartItems = (List<CartItemDTO>) httpSession.getAttribute(CART_SESSION_KEY);
+    @Override
+    public void transferAnonymousCartToUser(Long userId, HttpServletRequest request, HttpServletResponse response) {
+        // Получаем все cookies
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) return;
 
-        if (cartItems == null) {
-            cartItems = new ArrayList<>();
+        // Ищем все анонимные корзины (они начинаются с ANONYMOUS_CART_COOKIE_NAME)
+        List<CartItemDTO> anonymousCartItems = new ArrayList<>();
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().startsWith(ANONYMOUS_CART_COOKIE_NAME)) {
+                try {
+                    String json = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+                    List<CartItemDTO> items = objectMapper.readValue(json, new TypeReference<>() {});
+                    anonymousCartItems.addAll(items);
+
+                    // Удаляем анонимную корзину
+                    Cookie clearCookie = new Cookie(cookie.getName(), "");
+                    clearCookie.setPath("/");
+                    clearCookie.setMaxAge(0);
+                    response.addCookie(clearCookie);
+                } catch (Exception ignored) {}
+            }
         }
 
-        return cartItems;
+        if (anonymousCartItems.isEmpty()) return;
+
+        // Получаем текущую корзину пользователя
+        List<CartItemDTO> userCartItems = getCartFromCookies(request);
+        Map<Long, CartItemDTO> userCartMap = userCartItems.stream()
+                .collect(Collectors.toMap(CartItemDTO::getDishId, item -> item));
+
+        // Объединяем корзины
+        for (CartItemDTO anonymousItem : anonymousCartItems) {
+            anonymousItem.setUserId(userId);
+
+            if (userCartMap.containsKey(anonymousItem.getDishId())) {
+                CartItemDTO userItem = userCartMap.get(anonymousItem.getDishId());
+                userItem.setQuantity(userItem.getQuantity() + anonymousItem.getQuantity());
+            } else {
+                userCartItems.add(anonymousItem);
+            }
+        }
+
+        // Сохраняем объединенную корзину
+        saveCartToCookies(userCartItems, response, request);
+    }
+
+    @Override
+    public Integer getTotalItemsCount(HttpServletRequest request) {
+        return getCartFromCookies(request).stream()
+                .mapToInt(CartItemDTO::getQuantity)
+                .sum();
     }
 }
