@@ -5,12 +5,13 @@ import edu.food.edufood.model.Dishes;
 import edu.food.edufood.model.Order;
 import edu.food.edufood.model.OrderDish;
 import edu.food.edufood.model.User;
-import edu.food.edufood.repository.OrderDishRepository;
 import edu.food.edufood.repository.OrderRepository;
 import edu.food.edufood.service.CartService;
 import edu.food.edufood.service.DishesService;
 import edu.food.edufood.service.OrderDishService;
 import edu.food.edufood.service.OrderService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +23,15 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
+
     private final OrderRepository orderRepository;
     private final CartService cartService;
     private final DishesService dishesService;
     private final OrderDishService orderDishService;
 
     @Override
-    public Order createOrderFromCart(User user) {
-        List<CartItemDTO> cartItems = cartService.getCartItems();
+    public Order createOrderFromCart(User user, HttpServletRequest request, HttpServletResponse response) {
+        List<CartItemDTO> cartItems = cartService.getCartItems(request);
 
         if (cartItems.isEmpty()) {
             throw new IllegalStateException("Корзина пуста");
@@ -71,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
             orderDishService.saveOrderDish(orderDish);
         }
 
-        cartService.clearCart();
+        cartService.clearCart(request, response);
         return savedOrder;
     }
 }
