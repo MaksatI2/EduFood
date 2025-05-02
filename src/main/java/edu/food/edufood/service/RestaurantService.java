@@ -7,9 +7,6 @@ import org.springframework.data.domain.Pageable;
 public interface RestaurantService {
     Page<RestaurantDTO> findAll(Pageable pageable);
 
-
-
     Page<RestaurantDTO> findByName(String name, Pageable pageable);
 
-    Restaurant getById(Long id);
 }

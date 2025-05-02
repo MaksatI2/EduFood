@@ -1,7 +1,6 @@
 <#import "../layout.ftlh" as layout>
 <@layout.page title="Корзина" styles="/static/css/main.css" activeNav="basket">
     <style>
-        /* Стили для кнопок изменения количества */
         .quantity-control {
             display: flex;
             align-items: center;
@@ -26,7 +25,6 @@
             border: 1px solid #ddd;
         }
 
-        /* Скрываем стандартные кнопки input[type=number] */
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button {
             -webkit-appearance: none;
@@ -35,6 +33,18 @@
     </style>
 
     <h1 class="my-4">Ваша корзина</h1>
+
+    <#if successMessage??>
+        <div class="alert alert-success">
+            ${successMessage}
+        </div>
+    </#if>
+
+    <#if errorMessage??>
+        <div class="alert alert-danger">
+            ${errorMessage}
+        </div>
+    </#if>
 
     <#if cartItems?size == 0>
         <div class="alert alert-info">Ваша корзина пуста.</div>
