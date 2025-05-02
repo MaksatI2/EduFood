@@ -14,6 +14,47 @@
     <#if styles?has_content>
         <link rel="stylesheet" href="${styles}">
     </#if>
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .main {
+            flex-grow: 1;
+        }
+
+        footer a {
+            color: #ffffff;
+        }
+
+        footer a:hover {
+            color: #f1f1f1;
+        }
+
+        body.basket-page footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .social-icon {
+            color: #ffffff;
+            margin: 0 10px;
+        }
+
+        .social-icon:hover {
+            color: #f1f1f1;
+        }
+
+        footer .contacts {
+            color: #ccc;
+        }
+    </style>
+
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
