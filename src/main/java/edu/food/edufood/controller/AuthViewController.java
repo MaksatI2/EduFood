@@ -34,7 +34,6 @@ public class AuthViewController {
     @PostMapping("/register")
     public String registerUser(@Valid @ModelAttribute("user") UserDTO userDTO,
                                BindingResult bindingResult,
-                               Model model,
                                HttpServletRequest request,
                                HttpServletResponse response) {
         if (bindingResult.hasErrors()) {

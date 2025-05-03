@@ -58,7 +58,6 @@ public class OrderServiceImpl implements OrderService {
                 .user(user)
                 .totalPrice(totalPrice)
                 .createdAt(LocalDateTime.now())
-                .sessionId(cartItems.get(0).getSessionId())
                 .build();
 
         Order savedOrder = orderRepository.save(order);

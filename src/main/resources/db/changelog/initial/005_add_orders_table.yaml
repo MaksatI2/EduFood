@@ -22,11 +22,6 @@ databaseChangeLog:
               - column:
                   name: created_at
                   type: TIMESTAMP
-              - column:
-                  name: session_id
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
         - addForeignKeyConstraint:
             baseTableName: orders
             baseColumnNames: user_id
