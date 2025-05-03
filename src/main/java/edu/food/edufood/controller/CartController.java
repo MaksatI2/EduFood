@@ -79,9 +79,10 @@ public class CartController {
     @GetMapping
     public String viewCart(
             HttpServletRequest request,
-            Model model) {
+            Model model,
+            @RequestParam(value = "page", defaultValue = "1") int page) {
 
-        Map<String, Object> cartViewModel = cartService.prepareCartViewModel(request);
+        Map<String, Object> cartViewModel = cartService.prepareCartViewModel(request, page);
         model.addAllAttributes(cartViewModel);
 
         int totalItems = cartService.getTotalItemsCount(request);

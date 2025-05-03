@@ -1,57 +1,7 @@
 <#import "/spring.ftl" as spring>
 <#import "../layout.ftlh" as main>
 
-<@main.page title="Рестораны - EduFood" styles="/static/css/main.css" activeNav="restaurants">
-    <style>
-        :root {
-            --primary-color: #ff6b6b;
-            --secondary-color: #ffa502;
-            --dark-color: #2f3542;
-            --light-color: #f1f2f6;
-        }
-
-        .restaurants-header {
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding: 70px 0;
-            margin-bottom: 50px;
-        }
-
-        .restaurant-card {
-            border: none;
-            border-radius: 15px;
-            overflow: hidden;
-            transition: all 0.3s;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        .restaurant-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .restaurant-card img {
-            height: 180px;
-            object-fit: cover;
-        }
-
-        .pagination .page-item.active .page-link {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-
-        .pagination .page-link {
-            color: var(--primary-color);
-        }
-
-        .col-lg-4{
-            margin-bottom: 30px;
-        }
-    </style>
-
+<@main.page title="Рестораны - EduFood" styles="/static/css/main.css" styles="/static/css/restaurants.css" activeNav="restaurants">
     <section class="restaurants-header text-center">
         <div class="container">
             <h1 class="display-4 fw-bold mb-4">Рестораны</h1>
@@ -77,29 +27,37 @@
         </div>
 
         <div class="row">
-            <#list restaurants as restaurant>
-                <div class="col-lg-4 col-md-6">
-                    <div class="restaurant-card card h-100">
-                        <img src="/static/restaurants/${restaurant.photoUrl}"
-                             class="card-img-top"
-                             style="height: 250px; object-fit: cover;"
-                             alt="${restaurant.name}">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">${restaurant.name}</h5>
-                            <p class="card-text text-muted">
-                                <#if restaurant.dishes?size gt 0>
-                                    ${restaurant.dishes?size} блюд
-                                <#else>
-                                    Меню недоступно
-                                </#if>
-                            </p>
-                            <div class="mt-auto d-flex justify-content-between align-items-center">
-                                <a href="dishes/restaurants/${restaurant.id}" class="btn btn-outline-primary">Подробнее</a>
+            <#if restaurants?has_content>
+                <div class="row">
+                    <#list restaurants as restaurant>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="restaurant-card card h-100">
+                                <img src="/static/restaurants/${restaurant.photoUrl}"
+                                     class="card-img-top"
+                                     style="height: 250px; object-fit: cover;"
+                                     alt="${restaurant.name}">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title">${restaurant.name}</h5>
+                                    <p class="card-text text-muted">
+                                        <#if restaurant.dishes?size gt 0>
+                                            ${restaurant.dishes?size} блюд
+                                        <#else>
+                                            Меню недоступно
+                                        </#if>
+                                    </p>
+                                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                                        <a href="dishes/restaurants/${restaurant.id}" class="btn btn-outline-primary">Подробнее</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </#list>
                 </div>
-            </#list>
+            <#else>
+                <div class="alert alert-info text-center" role="alert">
+                    Рестораны не найдены.
+                </div>
+            </#if>
         </div>
 
         <#if totalPages gt 1>

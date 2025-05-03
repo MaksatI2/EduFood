@@ -29,9 +29,6 @@ public class Order {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "session_id")
-    private String sessionId;
-
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderDish> orderDishes;
 }

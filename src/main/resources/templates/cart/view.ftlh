@@ -1,37 +1,5 @@
 <#import "../layout.ftlh" as layout>
-<@layout.page title="Корзина" styles="/static/css/main.css" activeNav="basket">
-    <style>
-        .quantity-control {
-            display: flex;
-            align-items: center;
-        }
-
-        .quantity-btn {
-            width: 30px;
-            height: 30px;
-            border: 1px solid #ddd;
-            background-color: #f8f9fa;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .quantity-input {
-            width: 50px;
-            height: 30px;
-            text-align: center;
-            margin: 0 5px;
-            border: 1px solid #ddd;
-        }
-
-        input[type=number]::-webkit-inner-spin-button,
-        input[type=number]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-    </style>
-
+<@layout.page title="Корзина" styles="/static/css/main.css" styles="/static/css/cart.css" activeNav="basket">
     <h1 class="my-4">Ваша корзина</h1>
 
     <#if successMessage??>
@@ -70,7 +38,7 @@
                 <tbody>
                 <#list cartItems as item>
                     <tr>
-                        <td>${item_index + 1}</td>
+                        <td>${(currentPage - 1) * 10 + item_index + 1}</td>
                         <td><strong>${item.dishName}</strong></td>
                         <td>${item.restaurantName}</td>
                         <td>
@@ -112,6 +80,30 @@
                 </tfoot>
             </table>
         </div>
+
+        <#if totalPages gt 1>
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item <#if currentPage == 1>disabled</#if>">
+                        <a class="page-link" href="/orders/cart?page=${currentPage - 1}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    <#list 1..totalPages as pageNum>
+                        <li class="page-item <#if pageNum == currentPage>active</#if>">
+                            <a class="page-link" href="/orders/cart?page=${pageNum}">${pageNum}</a>
+                        </li>
+                    </#list>
+
+                    <li class="page-item <#if currentPage == totalPages>disabled</#if>">
+                        <a class="page-link" href="/orders/cart?page=${currentPage + 1}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </#if>
 
         <div class="d-flex justify-content-between align-items-center mt-4">
             <form action="/orders/cart/clear" method="post">

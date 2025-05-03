@@ -16,6 +16,45 @@
     margin: 5px 0;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.main {
+    flex-grow: 1;
+}
+
+footer a {
+    color: #ffffff;
+}
+
+footer a:hover {
+    color: #f1f1f1;
+}
+
+body.basket-page footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.social-icon {
+    color: #ffffff;
+    margin: 0 10px;
+}
+
+.social-icon:hover {
+    color: #f1f1f1;
+}
+.badge {
+    font-size: 0.7em;
+    vertical-align: top;
+    margin-left: 2px;
+}
+
 @media (max-width: 992px) {
     .burger-label {
         display: block;

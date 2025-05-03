@@ -1,0 +1,47 @@
+:root {
+    --primary-color: #ff6b6b;
+    --secondary-color: #ffa502;
+    --dark-color: #2f3542;
+    --light-color: #f1f2f6;
+}
+
+.restaurants-header {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 70px 0;
+    margin-bottom: 50px;
+}
+
+.restaurant-card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.3s;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.restaurant-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.restaurant-card img {
+    height: 180px;
+    object-fit: cover;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.pagination .page-link {
+    color: var(--primary-color);
+}
+
+.col-lg-4{
+    margin-bottom: 30px;
+}

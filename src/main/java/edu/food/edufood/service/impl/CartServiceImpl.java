@@ -31,6 +31,7 @@ public class CartServiceImpl implements CartService {
 
     private static final String CART_COOKIE_NAME = "userCart";
     private static final String ANONYMOUS_CART_COOKIE_NAME = "anonymousCart";
+    private static final int ITEMS_PER_PAGE = 10;
 
     private Long getCurrentUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -71,7 +72,7 @@ public class CartServiceImpl implements CartService {
             Cookie cookie = new Cookie(cartCookieName, encoded);
             cookie.setPath("/");
             cookie.setHttpOnly(true);
-            cookie.setMaxAge(60 * 60 * 24 * 7); // 7 дней
+            cookie.setMaxAge(60 * 60 * 24 * 7);
             response.addCookie(cookie);
         } catch (Exception e) {
             e.printStackTrace();
@@ -184,7 +185,7 @@ public class CartServiceImpl implements CartService {
             Cookie cookie = new Cookie(userCookieName, encoded);
             cookie.setPath("/");
             cookie.setHttpOnly(true);
-            cookie.setMaxAge(60 * 60 * 24 * 7); // 7 дней
+            cookie.setMaxAge(60 * 60 * 24 * 7);
             response.addCookie(cookie);
         } catch (Exception e) {
             e.printStackTrace();
@@ -197,7 +198,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Map<String, Object> prepareCartViewModel(HttpServletRequest request) {
+    public Map<String, Object> prepareCartViewModel(HttpServletRequest request, int page) {
         Map<String, Object> model = new HashMap<>();
         List<CartItemDTO> cartItems = getCartItems(request);
 
@@ -208,7 +209,7 @@ public class CartServiceImpl implements CartService {
                 .collect(Collectors.toMap(DishesDTO::getId, d -> d));
 
         BigDecimal total = BigDecimal.ZERO;
-        List<CartItemViewModelDTO> viewList = new ArrayList<>();
+        List<CartItemViewModelDTO> allViewItems = new ArrayList<>();
 
         for (CartItemDTO item : cartItems) {
             DishesDTO dish = dishMap.get(item.getDishId());
@@ -222,22 +223,34 @@ public class CartServiceImpl implements CartService {
                 view.setTotalPrice(dish.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
 
                 total = total.add(view.getTotalPrice());
-                viewList.add(view);
+                allViewItems.add(view);
             }
         }
 
-        model.put("cartItems", viewList);
+        int totalItems = allViewItems.size();
+        int totalPages = (int) Math.ceil((double) totalItems / ITEMS_PER_PAGE);
+
+        page = Math.max(1, Math.min(page, totalPages));
+
+        int startIndex = (page - 1) * ITEMS_PER_PAGE;
+        int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
+
+        List<CartItemViewModelDTO> paginatedItems = allViewItems.subList(startIndex, endIndex);
+
+        model.put("cartItems", paginatedItems);
         model.put("totalPrice", total);
+        model.put("currentPage", page);
+        model.put("totalPages", totalPages);
+        model.put("hasPrevious", page > 1);
+        model.put("hasNext", page < totalPages);
+
         return model;
     }
 
     @Override
     public void transferAnonymousCartToUser(Long userId, HttpServletRequest request, HttpServletResponse response) {
-        // Получаем все cookies
         Cookie[] cookies = request.getCookies();
         if (cookies == null) return;
-
-        // Ищем все анонимные корзины (они начинаются с ANONYMOUS_CART_COOKIE_NAME)
         List<CartItemDTO> anonymousCartItems = new ArrayList<>();
         for (Cookie cookie : cookies) {
             if (cookie.getName().startsWith(ANONYMOUS_CART_COOKIE_NAME)) {
@@ -245,8 +258,6 @@ public class CartServiceImpl implements CartService {
                     String json = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
                     List<CartItemDTO> items = objectMapper.readValue(json, new TypeReference<>() {});
                     anonymousCartItems.addAll(items);
-
-                    // Удаляем анонимную корзину
                     Cookie clearCookie = new Cookie(cookie.getName(), "");
                     clearCookie.setPath("/");
                     clearCookie.setMaxAge(0);
@@ -256,13 +267,10 @@ public class CartServiceImpl implements CartService {
         }
 
         if (anonymousCartItems.isEmpty()) return;
-
-        // Получаем текущую корзину пользователя
         List<CartItemDTO> userCartItems = getCartFromCookies(request);
         Map<Long, CartItemDTO> userCartMap = userCartItems.stream()
                 .collect(Collectors.toMap(CartItemDTO::getDishId, item -> item));
 
-        // Объединяем корзины
         for (CartItemDTO anonymousItem : anonymousCartItems) {
             anonymousItem.setUserId(userId);
 
@@ -273,8 +281,6 @@ public class CartServiceImpl implements CartService {
                 userCartItems.add(anonymousItem);
             }
         }
-
-        // Сохраняем объединенную корзину
         saveCartToCookies(userCartItems, response, request);
     }
 
