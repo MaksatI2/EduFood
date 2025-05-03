@@ -40,11 +40,6 @@ public class DishesController {
 
         model.addAttribute("dishes", dishesPage);
         model.addAttribute("dishesPage", dishesPage);
-        int totalPages = dishesPage.getTotalPages();
-        if (totalPages > 0) {
-            model.addAttribute("pageNumbers",
-                    IntStream.rangeClosed(0, totalPages - 1).boxed().toList());
-        }
 
         return "dishes/list";
     }

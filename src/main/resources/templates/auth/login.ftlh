@@ -21,6 +21,12 @@
                                 ${registrationSuccess}
                             </div>
                         </#if>
+
+                        <#if authError??>
+                            <div class="alert alert-danger">
+                                ${authError}
+                            </div>
+                        </#if>
                         <form method="post" action="/login">
                             <#if _csrf??>
                                 <input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"

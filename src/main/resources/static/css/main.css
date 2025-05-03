@@ -157,5 +157,8 @@ footer {
 .alert-danger {
     background-color: #FFF5F5;
     color: #C53030;
-    border-left: 4px solid red;
+    border: 1px solid #FED7D7;
+    padding: 15px;
+    margin-bottom: 25px;
+    border-radius: 6px;
 }

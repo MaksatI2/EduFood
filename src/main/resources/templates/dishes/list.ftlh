@@ -85,39 +85,52 @@
                 </#list>
             </div>
 
-            <#if dishes.totalPages??>
+            <#if dishes.totalPages gt 1>
                 <nav class="mt-4" aria-label="Навигация по страницам">
                     <ul class="pagination justify-content-center">
-                        <li class="page-item <#if dishes.first>disabled</#if>">
+                        <li class="page-item <#if dishes.number == 0>disabled</#if>">
                             <a class="page-link" href="?page=0&size=${dishes.size}" aria-label="Первая">
                                 <span aria-hidden="true">&laquo;&laquo;</span>
                             </a>
                         </li>
-                        <li class="page-item <#if dishes.first>disabled</#if>">
+
+                        <li class="page-item <#if dishes.number == 0>disabled</#if>">
                             <a class="page-link" href="?page=${dishes.number - 1}&size=${dishes.size}" aria-label="Предыдущая">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <#list 1..dishes.totalPages as p>
-                            <li class="page-item <#if (dishes.number + 1) == p>active</#if>">
-                                <a class="page-link" href="?page=${p - 1}&size=${dishes.size}">${p}</a>
+
+                        <#assign startPage = [1, dishes.number - 2]?max>
+                        <#assign endPage = [dishes.totalPages, dishes.number + 3]?min>
+
+                        <#if startPage gt 1>
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        </#if>
+
+                        <#list startPage..endPage as p>
+                            <#assign pageIndex = p - 1>
+                            <li class="page-item <#if dishes.number == pageIndex>active</#if>">
+                                <a class="page-link" href="?page=${pageIndex}&size=${dishes.size}">${p}</a>
                             </li>
                         </#list>
-                        <li class="page-item <#if dishes.last>disabled</#if>">
+
+                        <#if endPage lt dishes.totalPages>
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        </#if>
+
+                        <li class="page-item <#if dishes.number == dishes.totalPages - 1>disabled</#if>">
                             <a class="page-link" href="?page=${dishes.number + 1}&size=${dishes.size}" aria-label="Следующая">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
-                        <li class="page-item <#if dishes.last>disabled</#if>">
+
+                        <li class="page-item <#if dishes.number == dishes.totalPages - 1>disabled</#if>">
                             <a class="page-link" href="?page=${dishes.totalPages - 1}&size=${dishes.size}" aria-label="Последняя">
                                 <span aria-hidden="true">&raquo;&raquo;</span>
                             </a>
                         </li>
                     </ul>
                 </nav>
-                <div class="text-center text-muted mt-2">
-                    Показано ${dishes.number * dishes.size + 1}-${dishes.number * dishes.size + dishes.numberOfElements} из ${dishes.totalElements} блюд
-                </div>
             </#if>
         <#else>
             <div class="alert alert-info">
