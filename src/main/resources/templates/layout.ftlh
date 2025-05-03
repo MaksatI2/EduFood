@@ -7,54 +7,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>${title}</title>
+    <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/header.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-    <link rel="icon" href="/static/images/EduFood2.png" type="image/x-icon">
+    <link rel="icon" href="/static/images/EduFood.png" type="image/x-icon">
     <#if styles?has_content>
         <link rel="stylesheet" href="${styles}">
     </#if>
-
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            margin: 0;
-        }
-
-        .main {
-            flex-grow: 1;
-        }
-
-        footer a {
-            color: #ffffff;
-        }
-
-        footer a:hover {
-            color: #f1f1f1;
-        }
-
-        body.basket-page footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-
-        .social-icon {
-            color: #ffffff;
-            margin: 0 10px;
-        }
-
-        .social-icon:hover {
-            color: #f1f1f1;
-        }
-        .badge {
-            font-size: 0.7em;
-            vertical-align: top;
-            margin-left: 2px;
-        }
-    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
@@ -127,8 +87,8 @@
                 <div class="mt-4">
                     <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                    <a href="https://t.me/Dettroid" class="social-icon"><i class="fab fa-telegram"></i></a>
+                    <a href="https://github.com/MaksatI2" class="social-icon"><i class="fab fa-github"></i></a>
                 </div>
             </div>
             <div class="col-md-4 mb-4">

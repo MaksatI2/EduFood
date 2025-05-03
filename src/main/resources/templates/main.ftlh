@@ -54,47 +54,43 @@
     <section class="container mb-5">
         <div class="d-flex justify-content-between align-items-center mb-5">
             <h2>Популярные блюда</h2>
-            <a href="#" class="btn btn-outline-primary">Смотреть все</a>
+            <a href="/dishes" class="btn btn-outline-primary">Смотреть все</a>
         </div>
         <div class="row">
             <div class="col-md-3">
                 <div class="food-card card">
                     <div class="position-relative">
-                        <img src="/static/images/foods/pepperoni.jpg" class="card-img-top" alt="Пицца Пепперони">
-                        <span class="discount-badge">-20%</span>
+                        <img src="https://okeansushi.ru/templates/sushi/blog/pitstsa-pepperoni-istoriya-sostav-retsept-4.jpg" class="card-img-top" alt="Пицца Пепперони">
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Пицца Пепперони</h5>
                         <p class="card-text text-muted">Острая колбаса, сыр моцарелла, томатный соус</p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <span class="price">799 ₽</span>
-                            <button class="btn btn-sm btn-primary">В корзину</button>
+                            <span class="price">850 C</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="food-card card">
-                    <img src="/static/images/foods/philadelphia.jpg" class="card-img-top" alt="Ролл Филадельфия">
+                    <img src="https://sushiwok.ru/img/d8f116c4ad734759f875095afcfa30c6" class="card-img-top" alt="Ролл Филадельфия">
                     <div class="card-body">
                         <h5 class="card-title">Ролл Филадельфия</h5>
                         <p class="card-text text-muted">Лосось, сыр филадельфия, огурец, рис</p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <span class="price">450 ₽</span>
-                            <button class="btn btn-sm btn-primary">В корзину</button>
+                            <span class="price">890 С</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="food-card card">
-                    <img src="/static/images/foods/cheeseburger.jpg" class="card-img-top" alt="Чизбургер">
+                    <img src="https://www.chefmarket.ru/blog/wp-content/uploads/2020/11/hamburger-2000x1200.jpg" class="card-img-top" alt="Чизбургер">
                     <div class="card-body">
                         <h5 class="card-title">Чизбургер</h5>
                         <p class="card-text text-muted">Говяжья котлета, сыр, салат, соус</p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <span class="price">320 ₽</span>
-                            <button class="btn btn-sm btn-primary">В корзину</button>
+                            <span class="price">590 С</span>
                         </div>
                     </div>
                 </div>
@@ -102,15 +98,13 @@
             <div class="col-md-3">
                 <div class="food-card card">
                     <div class="position-relative">
-                        <img src="/static/images/foods/caesar.jpg" class="card-img-top" alt="Салат Цезарь">
-                        <span class="discount-badge">-15%</span>
+                        <img src="https://canapeclub.ru/image/cache/catalog/product/30-10-2019/cezar-818x818.jpg" class="card-img-top" alt="Салат Цезарь">
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Салат Цезарь</h5>
                         <p class="card-text text-muted">Курица, салат айсберг, сухарики, соус цезарь</p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <span class="price">350 ₽</span>
-                            <button class="btn btn-sm btn-primary">В корзину</button>
+                            <span class="price">450 С</span>
                         </div>
                     </div>
                 </div>

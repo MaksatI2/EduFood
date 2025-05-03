@@ -1,39 +1,7 @@
 <#import "/spring.ftl" as spring>
 <#import "../layout.ftlh" as main>
 
-<@main.page title="Регистрация - EduFood" styles="/static/css/main.css" activeNav="register">
-    <style>
-        :root {
-            --primary-color: #ff6b6b;
-            --secondary-color: #ffa502;
-            --dark-color: #2f3542;
-            --light-color: #f1f2f6;
-        }
-
-        .auth-card {
-            border: none;
-            border-radius: 15px;
-            overflow: hidden;
-            transition: transform 0.3s;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-        }
-
-        .form-control:focus {
-            box-shadow: none;
-            border-color: var(--primary-color);
-        }
-
-        .form-label {
-            font-weight: 500;
-        }
-
-        .registration-section {
-            padding: 70px 0;
-        }
-    </style>
-
+<@main.page title="Регистрация - EduFood" styles="/static/css/main.css" styles="/static/css/auth.css" activeNav="register">
     <section class="registration-section">
         <div class="container">
             <div class="row justify-content-center">
