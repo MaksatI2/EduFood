@@ -21,7 +21,7 @@ public interface CartService {
 
     void transferCartItemsToUser(Long userId, HttpServletRequest request, HttpServletResponse response);
 
-    Map<String, Object> prepareCartViewModel(HttpServletRequest request);
+    Map<String, Object> prepareCartViewModel(HttpServletRequest request, int page);
 
     void transferAnonymousCartToUser(Long userId, HttpServletRequest request, HttpServletResponse response);
 
