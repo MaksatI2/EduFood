@@ -3,9 +3,9 @@
     <div class="container py-5">
         <h2 class="mb-4">История заказов</h2>
 
-        <#if orders?? && orders?size gt 0>
+        <#if ordersPage?? && ordersPage.content?size gt 0>
             <div class="row">
-                <#list orders as order>
+                <#list ordersPage.content as order>
                     <div class="col-md-6 mb-4">
                         <a href="#orderModal${order.id}" class="card order-card text-decoration-none text-dark p-3">
                             <div class="d-flex justify-content-between align-items-center">
@@ -72,6 +72,31 @@
                     </div>
                 </#list>
             </div>
+            <nav aria-label="Pagination">
+                <ul class="pagination justify-content-center mt-4">
+                    <#if currentPage gt 0>
+                        <li class="page-item">
+                            <a class="page-link" href="?page=${currentPage - 1}" aria-label="Предыдущая">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    </#if>
+
+                    <#list 0..(totalPages - 1) as i>
+                        <li class="page-item <#if i == currentPage>active</#if>">
+                            <a class="page-link" href="?page=${i}">${i + 1}</a>
+                        </li>
+                    </#list>
+
+                    <#if currentPage lt (totalPages - 1)>
+                        <li class="page-item">
+                            <a class="page-link" href="?page=${currentPage + 1}" aria-label="Следующая">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </#if>
+                </ul>
+            </nav>
         <#else>
             <div class="text-center py-5">
                 <i class="fas fa-box-open fa-4x text-muted mb-4"></i>

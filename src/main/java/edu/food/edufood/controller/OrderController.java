@@ -2,6 +2,9 @@ package edu.food.edufood.controller;
 
 import edu.food.edufood.dto.OrderHistoryDTO;
 import edu.food.edufood.model.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import edu.food.edufood.model.User;
 import edu.food.edufood.service.OrderHistoryService;
 import edu.food.edufood.service.OrderService;
@@ -16,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -53,13 +57,20 @@ public class OrderController {
     }
 
     @GetMapping("/history")
-    public String getOrderHistory(Model model, Authentication authentication) {
+    public String getOrderHistory(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "5") int size,
+                                  Model model,
+                                  Authentication authentication) {
         String userEmail = authentication.getName();
         User user = userService.getUserEntityByEmail(userEmail)
                 .orElseThrow(() -> new IllegalStateException("Пользователь не найден"));
 
-        List<OrderHistoryDTO> orders = orderHistoryService.getOrderHistoryForUser(user.getId());
-        model.addAttribute("orders", orders);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<OrderHistoryDTO> ordersPage = orderHistoryService.getOrderHistoryForUser(user.getId(), pageable);
+
+        model.addAttribute("ordersPage", ordersPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", ordersPage.getTotalPages());
 
         return "cart/history";
     }
